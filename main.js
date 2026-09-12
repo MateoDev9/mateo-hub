@@ -25,6 +25,14 @@ const apps = [
     color: '#06b6d4'
   },
   {
+    id: 'poke-tactics',
+    title: 'Poke-Tactics',
+    description: 'Herramienta táctica y de estrategia para Pokémon.',
+    icon: '⚡',
+    url: '#', // TODO: Reemplazar con la URL real de Poke-Tactics
+    color: '#fbbf24'
+  },
+  {
     id: 'more',
     title: 'Próximamente',
     description: 'Nuevas herramientas y utilidades se añadirán aquí.',

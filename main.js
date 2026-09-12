@@ -29,7 +29,7 @@ const apps = [
     title: 'Poke-Tactics',
     description: 'Herramienta táctica y de estrategia para Pokémon.',
     icon: '⚡',
-    url: '#', // TODO: Reemplazar con la URL real de Poke-Tactics
+    url: 'https://poke-tactics.web.app/',
     color: '#fbbf24'
   },
   {

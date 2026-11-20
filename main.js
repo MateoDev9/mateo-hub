@@ -49,11 +49,16 @@ if (form) {
     status.textContent = form.dataset.sending;
     try {
       if (!endpoint) throw new Error('Contact endpoint is missing');
+      const fields = Object.fromEntries(new FormData(form));
+      if (new URL(endpoint, location.href).hostname === 'formspree.io') {
+        fields._gotcha = fields.website;
+        delete fields.website;
+      }
       const response = await fetch(endpoint, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          ...Object.fromEntries(new FormData(form)),
+          ...fields,
           project: form.dataset.project,
           lang: form.dataset.lang,
         }),

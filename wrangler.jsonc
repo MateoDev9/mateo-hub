@@ -1,0 +1,13 @@
+{
+  "name": "mateo-portfolio-contact",
+  "main": "worker/contact.mjs",
+  "compatibility_date": "2026-11-20",
+  "ratelimits": [{
+    "name": "CONTACT_LIMITER",
+    "namespace_id": "918144",
+    "simple": { "limit": 8, "period": 60 }
+  }],
+  "vars": {
+    "CONTACT_ORIGIN": "https://mateodev9.github.io"
+  }
+}

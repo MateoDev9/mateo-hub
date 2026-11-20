@@ -1,4 +1,8 @@
 import { projects, linkedin } from './content.mjs';
+import { services } from './services.mjs';
+
+const origin = 'https://mateodev9.github.io';
+const person = 'José Antonio Mateo Lara';
 
 const locales = {
   es: {
@@ -12,7 +16,9 @@ const locales = {
     privacy: 'Usaré tu correo y el mensaje para responder a tu consulta.',
     thinking: '¿Qué te gustaría resolver?', linkedin: 'Escríbeme por LinkedIn', next: 'Siguiente proyecto',
     aboutHead: 'Herramientas para el trabajo real.',
-    availability: 'Trabajo con profesionales y negocios del Campo de Gibraltar y también colaboro en remoto.',
+    availability: 'Trabajo con profesionales y negocios de La Línea de la Concepción y del resto del Campo de Gibraltar. También colaboro en remoto.',
+    title: 'Mateo | Software a medida en La Línea y Palantir Foundry',
+    description: 'José Antonio Mateo Lara. Desarrollo de software a medida y automatización en La Línea y el Campo de Gibraltar. Experiencia en Palantir Foundry.',
     aboutCopy: 'Combino el desarrollo freelance con el trabajo en un producto propio y la digitalización de procesos industriales. Me interesa entender cómo se hace el trabajo antes de decidir qué merece una aplicación, una integración o una automatización.',
     role: 'Desarrollador full stack en ALTEN, en proyectos para Airbus desde octubre de 2022.',
     back: 'Todos los proyectos', lang: 'Ver en inglés', filterLabel: 'Filtrar proyectos',
@@ -28,7 +34,9 @@ const locales = {
     privacy: 'I’ll use your email and message to reply to your enquiry.',
     thinking: 'What would you like to solve?', linkedin: 'Message me on LinkedIn', next: 'Next project',
     aboutHead: 'Tools for the work people do.',
-    availability: 'I work with professionals and businesses in the Campo de Gibraltar area and also take on projects remotely.',
+    availability: 'I work with professionals and businesses in La Línea de la Concepción and across Campo de Gibraltar. I also work remotely.',
+    title: 'Mateo | Custom software in La Línea & Palantir Foundry',
+    description: 'José Antonio Mateo Lara. Custom software and workflow automation in La Línea and Campo de Gibraltar, with hands-on Palantir Foundry experience.',
     aboutCopy: 'I combine freelance development with building my own product and digitalising industrial workflows. I like to understand how the work happens before deciding what needs an application, an integration, or automation.',
     role: 'Full-stack developer at ALTEN, working on projects for Airbus since October 2022.',
     back: 'All projects', lang: 'View in Spanish', filterLabel: 'Filter projects',
@@ -37,10 +45,15 @@ const locales = {
 
 const home = { es: '', en: 'en/' };
 const projectPath = (lang, project) => home[lang] + (lang === 'es' ? 'proyectos/' : 'work/') + project.id + '/';
+const routePath = (lang, { project, service }) => {
+  if (project) return projectPath(lang, project);
+  return service ? service[lang].path : home[lang];
+};
 export const routes = new Map();
 for (const lang of ['es', 'en']) {
   routes.set(home[lang], { lang });
   for (const project of projects) routes.set(projectPath(lang, project), { lang, project });
+  for (const service of Object.values(services)) routes.set(service[lang].path, { lang, service });
 }
 
 const safe = (value) => value.replace(/[&<>"']/g, (char) => ({
@@ -52,34 +65,66 @@ const picture = (base, source, alt, eager = false) => source
   ? `<img src="${base}portfolio/${source}" alt="${safe(alt)}" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async">`
   : '';
 
-export function render(template, { lang, project }, base) {
+export function sitemap(base) {
+  const urls = [...routes.keys()].map(path => `  <url><loc>${safe(origin + base + path)}</loc></url>`).join('\n');
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;
+}
+
+export function render(template, route, base) {
+  const { lang, project, service } = route;
   const t = locales[lang];
   const other = lang === 'es' ? 'en' : 'es';
   const local = (id) => `${base}${home[lang]}#${id}`;
-  const langPath = (code) => base + (project ? projectPath(code, project) : home[code]);
-  const person = 'José Antonio Mateo Lara';
-  const title = project ? `${project[lang].title} — ${person}` : `${person} — ${lang === 'es' ? 'Desarrollo y automatización' : 'Software development and automation'}`;
+  const pageUrl = code => origin + base + routePath(code, route);
+  const data = service?.[lang] ?? project?.[lang] ?? t;
+  const title = project
+    ? `${data.title} | ${project.category === 'palantir' ? 'Palantir Foundry' : data.label}`
+    : data.title;
+  const description = data.description ?? data.intro;
+  const author = {
+    '@type': 'Person', '@id': origin + base + '#mateo',
+    name: person, url: origin + base, sameAs: [linkedin],
+  };
+  const schema = service ? {
+    '@context': 'https://schema.org', '@type': 'Service',
+    name: data.heading, url: pageUrl(lang), description, serviceType: data.type,
+    provider: author,
+    ...(service === services.local ? { areaServed: ['La Línea de la Concepción', 'Campo de Gibraltar'].map(name => ({ '@type': 'Place', name })) } : {}),
+  } : !project ? {
+    '@context': 'https://schema.org',
+    '@graph': [author, { '@type': 'WebSite', name: 'Mateo', url: origin + base, creator: { '@id': author['@id'] }, inLanguage: ['es', 'en'] }],
+  } : null;
   const header = `
     <a class="skip" href="#main">${t.skip}</a>
     <header class="shell top">
       <a href="${base + home[lang]}" class="signature">Mateo<span>.</span></a>
       <nav aria-label="${lang === 'es' ? 'Navegación principal' : 'Main navigation'}">
-        <a href="${local('work')}">${t.work}</a><a href="${local('about')}">${t.about}</a><a href="${project ? '#contact' : local('contact')}">${t.contact}</a>
-        <a class="language" data-language href="${langPath(other)}" hreflang="${other}" lang="${other}" aria-label="${t.lang}" title="${t.lang}"><span aria-hidden="true">${lang === 'es' ? '<b>ES</b> / EN' : 'ES / <b>EN</b>'}</span></a>
+        <a href="${local('work')}">${t.work}</a><a href="${local('about')}">${t.about}</a><a href="${project || service ? '#contact' : local('contact')}">${t.contact}</a>
+        <a class="language" data-language href="${base + routePath(other, route)}" hreflang="${other}" lang="${other}" aria-label="${t.lang}" title="${t.lang}"><span aria-hidden="true">${lang === 'es' ? '<b>ES</b> / EN' : 'ES / <b>EN</b>'}</span></a>
       </nav>
     </header>`;
   const footer = `<footer class="shell footer"><span>${person}</span><a href="${linkedin}">LinkedIn ${arrow}</a></footer>`;
   const head = `<title>${safe(title)}</title>
-    <meta name="description" content="${safe(project ? project[lang].intro : t.intro)}">
+    <meta name="description" content="${safe(description)}">
+    ${lang === 'es' && !project && !service ? '<meta name="google-site-verification" content="-5q8QG7-0vFgUDLC2TU6EKFohXRDH50HHSsExHz3bIw">' : ''}
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="${safe(title)}">
+    <meta property="og:description" content="${safe(description)}">
+    <meta property="og:url" content="${pageUrl(lang)}">
+    ${schema ? `<script type="application/ld+json">${JSON.stringify(schema).replace(/</g, '\\u003c')}</script>` : ''}
     <meta name="theme-color" content="#f7f3e8">
     <link rel="icon" href="${base}favicon.svg" type="image/svg+xml">
-    ${['es', 'en'].map(code => `<link rel="alternate" hreflang="${code}" href="https://mateodev9.github.io${langPath(code)}">`).join('')}
-    <link rel="canonical" href="https://mateodev9.github.io${langPath(lang)}">`;
-  const form = contact(t, lang, project);
+    ${['es', 'en'].map(code => `<link rel="alternate" hreflang="${code}" href="${pageUrl(code)}">`).join('')}
+    <link rel="alternate" hreflang="x-default" href="${pageUrl('es')}">
+    <link rel="canonical" href="${pageUrl(lang)}">`;
+  const form = contact(t, lang, project?.id ?? service?.es.path.slice(0, -1));
+  const body = service ? servicePage(service, lang, base, form)
+    : project ? casePage(project, lang, base, t, form)
+      : landing(lang, base, t, form);
   return template
     .replace('<html lang="es">', `<html lang="${lang}">`)
     .replace('<!-- page-head -->', () => head)
-    .replace('<!-- page-body -->', () => header + (project ? casePage(project, lang, base, t, form) : landing(lang, base, t, form)) + footer);
+    .replace('<!-- page-body -->', () => header + body + footer);
 }
 
 function landing(lang, base, t, form) {
@@ -112,8 +157,29 @@ function landing(lang, base, t, form) {
       }).join('')}</div>
     </section>
     <section class="about" id="about"><div class="shell about-inner">
-      <h2>${t.aboutHead}</h2><div><p>${t.availability}</p><p>${t.aboutCopy}</p><p><strong>${t.role}</strong></p></div>
+      <h2>${t.aboutHead}</h2><div><p>${t.availability}</p><p>${t.aboutCopy}</p><p><strong>${t.role}</strong></p>
+      <ul class="related-links">${Object.values(services).map(service => `<li><a href="${base + service[lang].path}">${service[lang].nav} ${arrow}</a></li>`).join('')}</ul></div>
     </div></section>
+    ${form}
+  </main>`;
+}
+
+function servicePage(service, lang, base, form) {
+  const data = service[lang];
+  const examples = service.projects.map(id => projects.find(project => project.id === id));
+  return `<main id="main">
+    <section class="shell case-hero">
+      <a class="back" href="${base + home[lang]}">← Portfolio</a>
+      <h1>${data.heading}</h1>
+      <p class="case-intro">${data.intro}</p>
+      <a class="button blue service-action" href="#contact">${data.action} ${arrow}</a>
+    </section>
+    <section class="shell case-body">
+      ${data.sections.map(([title, copy]) => `<section class="case-section"><h2>${title}</h2><p>${copy}</p></section>`).join('')}
+      <section class="case-section"><h2>${data.examples}</h2>
+        <ul class="related-links">${examples.map(project => `<li><a href="${base + projectPath(lang, project)}">${project[lang].title} ${arrow}</a><p>${project[lang].intro}</p></li>`).join('')}</ul>
+      </section>
+    </section>
     ${form}
   </main>`;
 }
@@ -121,6 +187,7 @@ function landing(lang, base, t, form) {
 function casePage(project, lang, base, t, form) {
   const data = project[lang];
   const next = projects[(projects.indexOf(project) + 1) % projects.length];
+  const service = services[project.category === 'palantir' ? 'palantir' : 'local'][lang];
   return `<main id="main">
     <section class="shell case-hero ${project.category}">
       <a class="back" href="${base + home[lang]}#work">← ${t.back}</a>
@@ -133,15 +200,16 @@ function casePage(project, lang, base, t, form) {
       ${data.sections.map(([title, copy, image, alt]) => `<section class="case-section"><h2>${title}</h2><div><p>${copy}</p>${picture(base, image, alt)}</div></section>`).join('')}
       ${project.url ? `<a class="button blue" href="${project.url}">${data.link} ${arrow}</a>` : ''}
     </article>
-    <div class="shell next"><a href="${base + projectPath(lang, next)}">${t.next} <strong>${next[lang].title}</strong> ${arrow}</a></div>
+    <div class="shell next"><a href="${base + projectPath(lang, next)}">${t.next} <strong>${next[lang].title}</strong> ${arrow}</a>
+    <ul class="related-links"><li><a href="${base + service.path}">${service.nav} ${arrow}</a></li></ul></div>
     ${form}
   </main>`;
 }
 
-function contact(t, lang, project) {
+function contact(t, lang, source) {
   return `<section class="contact" id="contact"><div class="shell contact-inner">
     <div><h2>${t.thinking}</h2><a href="${linkedin}">${t.linkedin} ${arrow}</a></div>
-    <form method="post" data-contact data-lang="${lang}" data-project="${project?.id ?? ''}" data-sending="${t.sending}" data-sent="${t.sent}" data-error="${t.error}" hidden>
+    <form method="post" data-contact data-lang="${lang}" data-project="${source ?? ''}" data-sending="${t.sending}" data-sent="${t.sent}" data-error="${t.error}" hidden>
       <label for="visitor-email">${t.email}</label><input id="visitor-email" type="email" name="email" autocomplete="email" required maxlength="254">
       <label for="visitor-name">${t.name}</label><input id="visitor-name" name="name" autocomplete="name" maxlength="120">
       <label for="visitor-message">${t.message}</label><textarea id="visitor-message" name="message" rows="4" maxlength="5000" required aria-describedby="privacy"></textarea>

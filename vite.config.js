@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { Readable } from 'node:stream';
 import { defineConfig, loadEnv } from 'vite';
-import { render, routes } from './portfolio.mjs';
+import { render, routes, sitemap } from './portfolio.mjs';
 import { handleContact } from './worker/contact.mjs';
 
 const base = '/mateo-hub/';
@@ -17,6 +17,11 @@ export default defineConfig(({ mode }) => ({
         const origin = `http://${request.headers.host}`;
         const url = new URL(request.url, origin);
         const path = url.pathname;
+        if (path === base + 'sitemap.xml') {
+          response.setHeader('Content-Type', 'application/xml; charset=utf-8');
+          response.end(sitemap(base));
+          return;
+        }
         if (path === base + 'api/contact') {
           try {
             const body = request.method === 'POST' ? Readable.toWeb(request) : undefined;
@@ -45,6 +50,7 @@ export default defineConfig(({ mode }) => ({
       handler(_, bundle) {
         const entry = bundle['index.html'];
         const template = String(entry.source);
+        this.emitFile({ type: 'asset', fileName: 'sitemap.xml', source: sitemap(base) });
         for (const [path, route] of routes) {
           const source = render(template, route, base);
           if (!path) entry.source = source;

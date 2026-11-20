@@ -6,6 +6,8 @@ const projects = new Set([
   'del-chat-al-pedido',
   'evaluacion-de-riesgo-y-complejidad',
   'seguimiento-de-hitos',
+  'desarrollo-software-la-linea',
+  'desarrollador-palantir-foundry',
 ]);
 const emailPattern = /^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/;
 

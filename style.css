@@ -110,6 +110,12 @@ form .button:disabled { cursor: wait; opacity: .7; }
 .next a { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 20px; text-decoration: none; }
 .next a:hover strong { text-decoration: underline; }
 .next strong { font: clamp(20px, 3vw, 37px)/1.04 var(--display); letter-spacing: -.05em; }
+.service-action { margin-top: 24px; }
+.related-links { display: grid; gap: 14px; margin: 22px 0 0; padding: 0; list-style: none; }
+.case-section .related-links { margin: 0; }
+.related-links a { font-weight: 700; text-decoration: underline; text-underline-offset: .2em; }
+.related-links a:hover { text-decoration-thickness: 2px; }
+.related-links p { margin-top: 4px; }
 @media (max-width: 850px) {
   .hero { grid-template-columns: 1.22fr 1fr; }
   .project { grid-column: span 6; }

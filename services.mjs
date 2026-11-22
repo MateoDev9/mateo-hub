@@ -11,6 +11,7 @@ export const services = {
       type: 'Desarrollo de software a medida y automatización de procesos',
       action: 'Cuéntame qué proceso quieres mejorar',
       sections: [
+        ['Experiencia resolviendo problemas para Airbus', 'Desde 2022 trabajo a través de ALTEN en proyectos para Airbus. He ayudado a trasladar reglas de planificación desde hojas de cálculo y a reunir información dispersa para que los equipos puedan identificar qué pedidos, piezas o entregables requieren atención. Aplico ese mismo método a un negocio local: entender qué decisión cuesta tomar y construir la herramienta que la simplifique.'],
         ['Herramientas internas y paneles', 'Si para revisar pedidos, socios, tareas o cobros tienes que consultar varias hojas de cálculo, puedo reunir esa información en una aplicación que refleje cómo trabaja tu equipo. Por ejemplo, en HeavyDesk conectamos la gestión del gimnasio con las rutinas que el socio consulta desde el móvil.'],
         ['Automatización e integraciones', 'Si copias datos entre herramientas o tienes que revisar cada entrada a mano, puedo conectar los sistemas y automatizar los pasos repetitivos. En el piloto de venta en directo, la aplicación propone un pedido a partir del chat y deja que la vendedora lo revise antes de confirmarlo.'],
         ['Cómo empezamos', 'Cuéntame qué tarea se repite, con qué herramientas trabajas y qué tendría que mejorar. Revisamos un ejemplo real y acotamos una primera versión que puedas probar. Trabajo con negocios de La Línea y del resto del Campo de Gibraltar, y también colaboro en remoto.'],
@@ -27,6 +28,7 @@ export const services = {
       type: 'Custom software development and workflow automation',
       action: 'Tell me which workflow you want to improve',
       sections: [
+        ['Experience solving problems on Airbus projects', 'Since 2022 I’ve worked on Airbus projects through ALTEN. I’ve helped move planning rules out of spreadsheets and bring scattered information together so teams can see which orders, parts or deliverables need attention. I use the same approach with local businesses: understand which decisions are hard to make and build a tool that makes them easier.'],
         ['Internal tools and dashboards', 'If checking orders, memberships, tasks or payments means opening several spreadsheets, I can bring that information into an app that fits the way your team works. With HeavyDesk, for example, we connected gym management with the workouts members view on their phones.'],
         ['Automation and integrations', 'If you copy information between tools or review each entry manually, I can connect the systems and automate repetitive steps. In the live-selling pilot, the app drafts an order from the chat and lets the seller check it before confirming.'],
         ['How we get started', 'Tell me what task keeps coming up, what tools you use and what needs to improve. We can look at a real example and scope a first version for you to try. I work with businesses in La Línea and across Campo de Gibraltar, and I also work remotely.'],
@@ -42,7 +44,7 @@ export const services = {
       title: 'Desarrollador Palantir Foundry en España | Mateo',
       heading: 'Desarrollador Palantir Foundry',
       description: 'José Antonio Mateo Lara, desarrollador Palantir Foundry en España. Casos de aplicaciones operativas, planificación, Workshop y transformaciones con PySpark.',
-      intro: 'Soy José Antonio Mateo Lara, desarrollador full stack en ALTEN en proyectos para Airbus. Trabajo con Palantir Foundry en aplicaciones operativas, transformaciones de datos y flujos de planificación.',
+      intro: 'Soy José Antonio Mateo Lara, desarrollador full stack en ALTEN en proyectos para Airbus desde 2022. Uso Palantir Foundry para convertir reglas de planificación y datos dispersos en aplicaciones que ayudan a los equipos industriales a decidir qué requiere atención.',
       type: 'Desarrollo en Palantir Foundry',
       action: 'Hablemos de tu proyecto en Palantir',
       sections: [
@@ -58,7 +60,7 @@ export const services = {
       title: 'Palantir Foundry developer in Spain | Mateo',
       heading: 'Palantir Foundry developer',
       description: 'José Antonio Mateo Lara, Palantir Foundry developer in Spain. Case studies on operational applications, supply planning, Workshop and PySpark transforms.',
-      intro: 'I’m José Antonio Mateo Lara, a full-stack developer at ALTEN working on Airbus projects. My work in Palantir Foundry spans operational applications, data transforms and planning workflows.',
+      intro: 'I’m José Antonio Mateo Lara, a full-stack developer at ALTEN working on Airbus projects since 2022. I use Palantir Foundry to turn planning rules and scattered data into applications that help industrial teams decide what needs attention.',
       type: 'Palantir Foundry development',
       action: 'Discuss your Palantir project',
       sections: [

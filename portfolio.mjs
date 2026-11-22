@@ -8,36 +8,36 @@ const locales = {
   es: {
     work: 'Proyectos', about: 'Sobre mí', contact: 'Contacto', skip: 'Saltar al contenido',
     headline: ['Cuéntame qué parte', 'de tu trabajo te está', 'dando problemas.'],
-    intro: 'Soy José Antonio Mateo Lara. Desarrollo herramientas a medida y automatizo procesos. Trabajo en proyectos de digitalización para Airbus a través de ALTEN.',
+    intro: 'Soy José Antonio Mateo Lara. Desarrollo software a medida y automatizo procesos. Desde 2022 trabajo en proyectos para Airbus a través de ALTEN, convirtiendo problemas de planificación y seguimiento industrial en herramientas que los equipos pueden usar.',
     action: 'Cuéntame tu problema', selected: 'Proyectos seleccionados',
     filters: ['Todos', 'Negocio', 'Palantir'], email: 'Tu correo', name: 'Tu nombre (opcional)',
     message: '¿Qué te gustaría resolver?', send: 'Enviar mensaje', sending: 'Enviando…',
     sent: 'Mensaje enviado. Gracias por escribirme.', error: 'No se pudo enviar el mensaje. Puedes volver a intentarlo o escribirme por LinkedIn.',
     privacy: 'Usaré tu correo y el mensaje para responder a tu consulta.',
     thinking: '¿Qué te gustaría resolver?', linkedin: 'Escríbeme por LinkedIn', next: 'Siguiente proyecto',
-    aboutHead: 'Herramientas para el trabajo real.',
+    aboutHead: 'Del problema a una herramienta útil.',
     availability: 'Trabajo con profesionales y negocios de La Línea de la Concepción y del resto del Campo de Gibraltar. También colaboro en remoto.',
     title: 'Mateo | Software a medida en La Línea y Palantir Foundry',
     description: 'José Antonio Mateo Lara. Desarrollo de software a medida y automatización en La Línea y el Campo de Gibraltar. Experiencia en Palantir Foundry.',
-    aboutCopy: 'Combino el desarrollo freelance con el trabajo en un producto propio y la digitalización de procesos industriales. Me interesa entender cómo se hace el trabajo antes de decidir qué merece una aplicación, una integración o una automatización.',
+    aboutCopy: 'En proyectos para Airbus he trabajado con equipos que necesitan saber qué suministros pueden cubrir, qué piezas quedan pendientes o qué entregables ponen en riesgo un hito. Mi trabajo consiste en entender esas decisiones, convertir las reglas del proceso en software y dar al equipo una forma clara de actuar. Aplico el mismo método a proyectos freelance y al desarrollo de HeavyDesk.',
     role: 'Desarrollador full stack en ALTEN, en proyectos para Airbus desde octubre de 2022.',
     back: 'Todos los proyectos', lang: 'Ver en inglés', filterLabel: 'Filtrar proyectos',
   },
   en: {
     work: 'Work', about: 'About', contact: 'Contact', skip: 'Skip to content',
     headline: ['Tell me what part', 'of your work is', 'causing trouble.'],
-    intro: 'I’m José Antonio Mateo Lara. I build custom tools and automate workflows. I work on digitalisation projects for Airbus through ALTEN.',
+    intro: 'I’m José Antonio Mateo Lara. I build custom software and automate workflows. Since 2022 I’ve worked on Airbus projects through ALTEN, turning industrial planning and tracking problems into tools teams can use.',
     action: 'Tell me what’s getting in the way', selected: 'Selected work',
     filters: ['All', 'Business', 'Palantir'], email: 'Your email', name: 'Your name (optional)',
     message: 'What would you like to solve?', send: 'Send message', sending: 'Sending…',
     sent: 'Message sent. Thanks for getting in touch.', error: 'The message could not be sent. Please try again or contact me on LinkedIn.',
     privacy: 'I’ll use your email and message to reply to your enquiry.',
     thinking: 'What would you like to solve?', linkedin: 'Message me on LinkedIn', next: 'Next project',
-    aboutHead: 'Tools for the work people do.',
+    aboutHead: 'From a problem to a tool that helps.',
     availability: 'I work with professionals and businesses in La Línea de la Concepción and across Campo de Gibraltar. I also work remotely.',
     title: 'Mateo | Custom software in La Línea & Palantir Foundry',
     description: 'José Antonio Mateo Lara. Custom software and workflow automation in La Línea and Campo de Gibraltar, with hands-on Palantir Foundry experience.',
-    aboutCopy: 'I combine freelance development with building my own product and digitalising industrial workflows. I like to understand how the work happens before deciding what needs an application, an integration, or automation.',
+    aboutCopy: 'On Airbus projects I’ve worked with teams that need to know which orders they can cover, which parts are outstanding, and which deliverables could put a milestone at risk. My job is to understand those decisions, translate process rules into software and give the team a clear way to act. I take the same approach to freelance projects and to building HeavyDesk.',
     role: 'Full-stack developer at ALTEN, working on projects for Airbus since October 2022.',
     back: 'All projects', lang: 'View in Spanish', filterLabel: 'Filter projects',
   },
@@ -92,7 +92,7 @@ export function render(template, route, base) {
     ...(service === services.local ? { areaServed: ['La Línea de la Concepción', 'Campo de Gibraltar'].map(name => ({ '@type': 'Place', name })) } : {}),
   } : !project ? {
     '@context': 'https://schema.org',
-    '@graph': [author, { '@type': 'WebSite', name: 'Mateo', url: origin + base, creator: { '@id': author['@id'] }, inLanguage: ['es', 'en'] }],
+    '@graph': [author, { '@type': 'WebSite', name: person, alternateName: 'Mateo', url: origin + '/', creator: { '@id': author['@id'] }, inLanguage: ['es', 'en'] }],
   } : null;
   const header = `
     <a class="skip" href="#main">${t.skip}</a>
@@ -103,17 +103,18 @@ export function render(template, route, base) {
         <a class="language" data-language href="${base + routePath(other, route)}" hreflang="${other}" lang="${other}" aria-label="${t.lang}" title="${t.lang}"><span aria-hidden="true">${lang === 'es' ? '<b>ES</b> / EN' : 'ES / <b>EN</b>'}</span></a>
       </nav>
     </header>`;
-  const footer = `<footer class="shell footer"><span>${person}</span><a href="${linkedin}">LinkedIn ${arrow}</a></footer>`;
+  const footer = `<footer class="shell footer"><a href="${origin}/">${person}</a><a href="${linkedin}">LinkedIn ${arrow}</a></footer>`;
   const head = `<title>${safe(title)}</title>
     <meta name="description" content="${safe(description)}">
     ${lang === 'es' && !project && !service ? '<meta name="google-site-verification" content="-5q8QG7-0vFgUDLC2TU6EKFohXRDH50HHSsExHz3bIw">' : ''}
     <meta property="og:type" content="website">
+    <meta property="og:site_name" content="${person}">
     <meta property="og:title" content="${safe(title)}">
     <meta property="og:description" content="${safe(description)}">
     <meta property="og:url" content="${pageUrl(lang)}">
     ${schema ? `<script type="application/ld+json">${JSON.stringify(schema).replace(/</g, '\\u003c')}</script>` : ''}
     <meta name="theme-color" content="#f7f3e8">
-    <link rel="icon" href="${base}favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="${base}favicon.png" type="image/png" sizes="96x96">
     ${['es', 'en'].map(code => `<link rel="alternate" hreflang="${code}" href="${pageUrl(code)}">`).join('')}
     <link rel="alternate" hreflang="x-default" href="${pageUrl('es')}">
     <link rel="canonical" href="${pageUrl(lang)}">`;

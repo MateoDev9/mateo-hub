@@ -7,41 +7,43 @@ const person = 'José Antonio Mateo Lara';
 const locales = {
   es: {
     work: 'Proyectos', about: 'Sobre mí', contact: 'Contacto', skip: 'Saltar al contenido',
-    headline: ['Cuéntame qué parte', 'de tu trabajo te está', 'dando problemas.'],
-    intro: 'Soy José Antonio Mateo Lara. Desarrollo software a medida y automatizo procesos. Desde 2022 trabajo en proyectos para Airbus a través de ALTEN, convirtiendo problemas de planificación y seguimiento industrial en herramientas que los equipos pueden usar.',
-    action: 'Cuéntame tu problema', selected: 'Proyectos seleccionados',
+    headline: ['Cuéntame', 'qué necesitas.'],
+    intro: 'Soy José Antonio Mateo Lara. Creo webs para captar clientes, mejoro las que ya existen y desarrollo software a medida. Si estás valorando una idea, también te ayudo a decidir cómo ponerla en marcha.',
+    action: 'Hablemos', selected: 'Proyectos seleccionados',
     filters: ['Todos', 'Negocio', 'Palantir'], email: 'Tu correo', name: 'Tu nombre (opcional)',
-    message: '¿Qué te gustaría resolver?', send: 'Enviar mensaje', sending: 'Enviando…',
+    message: '¿En qué puedo ayudarte?', send: 'Enviar mensaje', sending: 'Enviando…',
     sent: 'Mensaje enviado. Gracias por escribirme.', error: 'No se pudo enviar el mensaje. Puedes volver a intentarlo o escribirme por LinkedIn.',
     privacy: 'Usaré tu correo y el mensaje para responder a tu consulta.',
-    thinking: '¿Qué te gustaría resolver?', linkedin: 'Escríbeme por LinkedIn', next: 'Siguiente proyecto',
+    thinking: 'Hablemos.', linkedin: 'Escríbeme por LinkedIn', next: 'Siguiente proyecto',
     aboutHead: 'Del problema a una herramienta útil.',
     availability: 'Trabajo con profesionales y negocios de La Línea de la Concepción y del resto del Campo de Gibraltar. También colaboro en remoto.',
-    title: 'Mateo | Software a medida en La Línea y Palantir Foundry',
-    description: 'José Antonio Mateo Lara. Desarrollo de software a medida y automatización en La Línea y el Campo de Gibraltar. Experiencia en Palantir Foundry.',
+    title: 'Mateo | Desarrollo web en La Línea y Palantir Foundry',
+    description: 'José Antonio Mateo Lara. Desarrollo y mantenimiento web, software a medida y consultoría tecnológica en La Línea y el Campo de Gibraltar. Experiencia en Palantir Foundry.',
     aboutCopy: 'En proyectos para Airbus he trabajado con equipos que necesitan saber qué suministros pueden cubrir, qué piezas quedan pendientes o qué entregables ponen en riesgo un hito. Mi trabajo consiste en entender esas decisiones, convertir las reglas del proceso en software y dar al equipo una forma clara de actuar. Aplico el mismo método a proyectos freelance y al desarrollo de HeavyDesk.',
     role: 'Desarrollador full stack en ALTEN, en proyectos para Airbus desde octubre de 2022.',
     back: 'Todos los proyectos', lang: 'Ver en inglés', filterLabel: 'Filtrar proyectos',
     serviceLinks: 'Servicios',
+    serviceArea: 'La Línea, Campo de Gibraltar y en remoto',
   },
   en: {
     work: 'Work', about: 'About', contact: 'Contact', skip: 'Skip to content',
-    headline: ['Tell me what part', 'of your work is', 'causing trouble.'],
-    intro: 'I’m José Antonio Mateo Lara. I build custom software and automate workflows. Since 2022 I’ve worked on Airbus projects through ALTEN, turning industrial planning and tracking problems into tools teams can use.',
-    action: 'Tell me what’s getting in the way', selected: 'Selected work',
+    headline: ['Tell me what', 'you need.'],
+    intro: 'I’m José Antonio Mateo Lara. I create websites to help businesses reach customers. I also improve existing sites, develop custom software and help you figure out how to put an idea into practice.',
+    action: 'Let’s talk', selected: 'Selected work',
     filters: ['All', 'Business', 'Palantir'], email: 'Your email', name: 'Your name (optional)',
-    message: 'What would you like to solve?', send: 'Send message', sending: 'Sending…',
+    message: 'How can I help?', send: 'Send message', sending: 'Sending…',
     sent: 'Message sent. Thanks for getting in touch.', error: 'The message could not be sent. Please try again or contact me on LinkedIn.',
     privacy: 'I’ll use your email and message to reply to your enquiry.',
-    thinking: 'What would you like to solve?', linkedin: 'Message me on LinkedIn', next: 'Next project',
+    thinking: 'Let’s talk.', linkedin: 'Message me on LinkedIn', next: 'Next project',
     aboutHead: 'From a problem to a tool that helps.',
     availability: 'I work with professionals and businesses in La Línea de la Concepción and across Campo de Gibraltar. I also work remotely.',
-    title: 'Mateo | Custom software in La Línea & Palantir Foundry',
-    description: 'José Antonio Mateo Lara. Custom software and workflow automation in La Línea and Campo de Gibraltar, with hands-on Palantir Foundry experience.',
+    title: 'Mateo | Web development in La Línea & Palantir Foundry',
+    description: 'José Antonio Mateo Lara. Web development and maintenance, custom software and technology consulting in La Línea and Campo de Gibraltar. Palantir Foundry experience.',
     aboutCopy: 'On Airbus projects I’ve worked with teams that need to know which orders they can cover, which parts are outstanding, and which deliverables could put a milestone at risk. My job is to understand those decisions, translate process rules into software and give the team a clear way to act. I take the same approach to freelance projects and to building HeavyDesk.',
     role: 'Full-stack developer at ALTEN, working on projects for Airbus since October 2022.',
     back: 'All projects', lang: 'View in Spanish', filterLabel: 'Filter projects',
     serviceLinks: 'Services',
+    serviceArea: 'La Línea, Campo de Gibraltar and remote',
   },
 };
 
@@ -115,7 +117,8 @@ export function render(template, route, base) {
   };
   const schema = service ? {
     '@context': 'https://schema.org', '@type': 'Service',
-    name: data.heading, url: pageUrl(lang), description, serviceType: data.type,
+    name: data.heading, url: pageUrl(lang), description,
+    serviceType: data.type ?? data.offers.map(({ title }) => title),
     provider: author,
     ...(service === services.local ? { areaServed: ['La Línea de la Concepción', 'Campo de Gibraltar'].map(name => ({ '@type': 'Place', name })) } : {}),
   } : !project ? {
@@ -160,6 +163,8 @@ export function render(template, route, base) {
 function landing(lang, base, t, form) {
   const featured = projects[0];
   const data = featured[lang];
+  const local = services.local[lang];
+  const palantir = services.palantir[lang];
   return `<main id="main">
     <section class="shell hero">
       <div class="hero-copy">
@@ -172,9 +177,21 @@ function landing(lang, base, t, form) {
         <div class="hero-caption"><div><strong>HeavyDesk</strong><span>${data.label}</span></div>${arrow}</div>
       </a>
     </section>
-    <nav class="shell service-nav" aria-label="${t.serviceLinks}">
-      ${Object.values(services).map(service => `<a href="${base + service[lang].path}">${service[lang].nav} ${arrow}</a>`).join('')}
-    </nav>
+    <section class="services" id="services" aria-labelledby="services-title">
+      <div class="shell services-inner">
+        <div>
+          <h2 id="services-title">${t.serviceLinks}</h2>
+          <p>${t.serviceArea}</p>
+          <a class="specialty-link" href="${base + palantir.path}">${palantir.nav} ${arrow}</a>
+        </div>
+        <ul class="offer-list">
+          ${local.offers.map(({ id, title, summary }) => `<li>
+            <a href="${base + local.path}#${id}"><strong>${title}</strong>${arrow}</a>
+            <p>${summary}</p>
+          </li>`).join('')}
+        </ul>
+      </div>
+    </section>
     <section class="shell work" id="work" aria-labelledby="work-title">
       <div class="section-head"><h2 id="work-title">${t.selected}</h2>
       <div class="filter" role="group" aria-label="${t.filterLabel}" data-filters hidden>
@@ -199,15 +216,19 @@ function landing(lang, base, t, form) {
 function servicePage(service, lang, base, form) {
   const data = service[lang];
   const examples = service.projects.map(id => projects.find(project => project.id === id));
+  const sections = [
+    ...(data.offers ?? []).map(({ id, title, copy }) => [title, copy, id]),
+    ...data.sections,
+  ];
   return `<main id="main">
-    <section class="shell case-hero">
+    <section class="shell case-hero service-hero">
       <a class="back" href="${base + home[lang]}">← Portfolio</a>
       <h1>${data.heading}</h1>
       <p class="case-intro">${data.intro}</p>
       <a class="button blue service-action" href="#contact">${data.action} ${arrow}</a>
     </section>
     <section class="shell case-body">
-      ${data.sections.map(([title, copy]) => `<section class="case-section"><h2>${title}</h2><p>${copy}</p></section>`).join('')}
+      ${sections.map(([title, copy, id]) => `<section class="case-section"${id ? ` id="${id}"` : ''}><h2>${title}</h2><p>${copy}</p></section>`).join('')}
       <section class="case-section"><h2>${data.examples}</h2>
         <ul class="related-links">${examples.map(project => `<li><a href="${base + projectPath(lang, project)}">${project[lang].title} ${arrow}</a><p>${project[lang].intro}</p></li>`).join('')}</ul>
       </section>

@@ -31,6 +31,7 @@ export const projects = [
     id: 'planificacion-de-suministros', category: 'palantir',
     es: {
       title: 'Planificación de suministros', label: 'Palantir · Planificación',
+      contribution: 'Trabajé en el traslado a Foundry con PySpark de las reglas que calculan qué pedidos pueden cubrirse.',
       intro: 'Trasladar la lógica de planificación de una hoja de cálculo a Palantir.',
       sections: [
         ['El problema', 'Una hoja de cálculo reunía cálculos de pedidos y cobertura. A medida que crecía la lógica, mantener las fórmulas y procesar los datos se volvía más difícil.'],
@@ -41,6 +42,7 @@ export const projects = [
     },
     en: {
       title: 'Supply planning', label: 'Palantir · Planning',
+      contribution: 'I helped move the rules that determine which orders can be covered to Foundry using PySpark.',
       intro: 'Moving spreadsheet-based planning logic into Palantir.',
       sections: [
         ['The problem', 'A spreadsheet combined order and supply coverage calculations. As the logic grew, maintaining the formulas and processing the data became harder.'],
@@ -75,6 +77,7 @@ export const projects = [
     id: 'seguimiento-de-aeronaves', category: 'palantir',
     es: {
       title: 'Seguimiento operativo de aeronaves', label: 'Palantir · Seguimiento industrial',
+      contribution: 'Trabajé en las vistas de piezas pendientes que llegaron a producción y permiten consultar el detalle por aeronave.',
       intro: 'Un panel operativo para consultar el estado de las aeronaves, piezas pendientes y planificación.',
       sections: [
         ['El problema', 'Los equipos necesitaban consultar información de planificación y entender qué incidencias seguían afectando a cada aeronave.'],
@@ -84,6 +87,7 @@ export const projects = [
     },
     en: {
       title: 'Aircraft operations tracking', label: 'Palantir · Industrial operations',
+      contribution: 'I worked on the missing-parts views that went live and let the team check the details for each aircraft.',
       intro: 'An operations dashboard for aircraft status, missing parts, and planning.',
       sections: [
         ['The problem', 'Teams needed to check planning information and understand which issues were still affecting each aircraft.'],
@@ -119,6 +123,7 @@ export const projects = [
     id: 'evaluacion-de-riesgo-y-complejidad', category: 'palantir',
     es: {
       title: 'Evaluación de riesgo y complejidad', label: 'Palantir · Evaluación industrial',
+      contribution: 'Incorporé un flujo para reabrir y editar evaluaciones de riesgo conservando los componentes que ya se habían seleccionado.',
       intro: 'Una herramienta para evaluar la complejidad de cada versión y revisar el riesgo de sus componentes.',
       sections: [
         ['El problema', 'El equipo necesitaba preparar evaluaciones para nuevas versiones de aeronaves y consultar las anteriores, incluso cuando una versión todavía no figuraba en la planificación.'],
@@ -128,6 +133,7 @@ export const projects = [
     },
     en: {
       title: 'Risk and complexity assessment', label: 'Palantir · Industrial assessment',
+      contribution: 'I added a workflow for reopening and editing risk assessments while retaining the previously selected components.',
       intro: 'A tool for assessing the complexity of each configuration and reviewing component risks.',
       sections: [
         ['The problem', 'The team needed to prepare assessments for new aircraft configurations and consult previous ones, including for configurations that were still absent from the planning data.'],
@@ -140,6 +146,7 @@ export const projects = [
     id: 'seguimiento-de-hitos', category: 'palantir',
     es: {
       title: 'Seguimiento de hitos de desarrollo', label: 'Palantir · Coordinación de entregables',
+      contribution: 'Desarrollé una matriz que organiza entregables por hito para consultar su estado y ver qué queda por revisar.',
       intro: 'Una vista para revisar entregables de cabina por versión de aeronave y detectar qué queda por resolver antes de cada hito.',
       sections: [
         ['El problema', 'En cada revisión del desarrollo de cabina, el equipo necesitaba consultar qué entregables correspondían a cada hito y qué incidencias seguían abiertas para una versión concreta.'],
@@ -149,6 +156,7 @@ export const projects = [
     },
     en: {
       title: 'Development milestone tracking', label: 'Palantir · Deliverable coordination',
+      contribution: 'I developed a matrix that organises deliverables by milestone so teams can check their status and see what still needs review.',
       intro: 'A view for reviewing cabin deliverables by aircraft configuration and spotting what needs attention before each milestone.',
       sections: [
         ['The problem', 'During cabin development reviews, the team needed to see which deliverables belonged to each milestone and which issues were still open for a given configuration.'],

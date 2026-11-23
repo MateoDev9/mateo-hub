@@ -67,6 +67,10 @@ nav a:hover, .footer a:hover { text-decoration: underline; text-underline-offset
 .hero h1 span { display: block; }
 .hero h1 span:last-child { color: var(--blue); }
 .hero-copy p { font-size: clamp(17px, 1.55vw, 23px); line-height: 1.5; max-width: 37ch; margin: clamp(24px, 3vw, 37px) 0 27px; }
+.hero-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px clamp(16px, 2.2vw, 32px); }
+.text-link { display: inline-flex; align-items: center; gap: .4em; min-height: 44px; padding-block: 8px; font-weight: 700; text-underline-offset: .2em; }
+.text-link:hover { text-decoration-thickness: 2px; }
+.hero-actions .text-link, .offer-detail a { color: var(--blue); }
 .button { display: inline-flex; gap: 22px; align-items: center; justify-content: space-between; min-height: 51px; padding: 13px 17px; text-decoration: none; font-weight: 700; border: 1px solid currentColor; cursor: pointer; }
 .button:hover { box-shadow: 4px 4px 0 var(--ink); }
 .blue { background: var(--blue); color: white; border-color: var(--blue); }
@@ -118,10 +122,18 @@ nav a:hover, .footer a:hover { text-decoration: underline; text-underline-offset
   }
 }
 .about, .contact { padding-block: clamp(60px, 9vw, 136px); }
-.about { background: var(--blue); color: white; }
-.about-inner, .contact-inner { display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(28px, 6vw, 100px); }
-.about p { font-size: clamp(18px, 2vw, 25px); line-height: 1.5; max-width: 40ch; }
-.about p + p { margin-top: 22px; }
+.about { background: var(--blue); color: white; padding-block: clamp(42px, 6vw, 94px); }
+.about-inner { display: grid; gap: clamp(26px, 4vw, 62px); }
+.about-intro, .about-proof, .contact-inner { display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(18px, 5vw, 84px); }
+.about-intro { align-items: end; }
+.about p { font-size: clamp(16px, 1.4vw, 20px); line-height: 1.5; max-width: 40ch; }
+.about h3 { font-size: clamp(18px, 1.8vw, 26px); line-height: 1.2; margin-bottom: 8px; }
+.about-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(18px, 4vw, 64px); list-style: none; margin: 0; padding: 0; }
+.about-proof { background: #191ac8; padding: clamp(16px, 2.4vw, 36px); }
+.about-proof h3 { font-size: clamp(17px, 1.35vw, 20px); margin-bottom: 4px; }
+.about-proof p { font-size: 16px; }
+.about-proof a span { color: var(--acid); }
+.about :focus-visible { outline-color: var(--acid); }
 .contact { background: var(--acid); }
 .contact h2 { max-width: 11ch; margin-bottom: 23px; }
 .contact a { font-weight: 700; text-underline-offset: 4px; }
@@ -133,6 +145,8 @@ form input { margin-bottom: 8px; }
 form .button { justify-self: start; margin-top: 8px; }
 form .button:disabled { cursor: wait; opacity: .7; }
 .privacy, .form-status { font-size: 14px; }
+.contact-context { margin-bottom: 8px; }
+.contact-guidance { font-size: 15px; line-height: 1.4; }
 .form-status:not(:empty) { margin-top: 3px; }
 .footer { display: flex; justify-content: space-between; gap: 16px; padding-block: 25px; font-weight: 700; }
 .case-hero { padding-block: 44px 55px; }
@@ -149,6 +163,12 @@ form .button:disabled { cursor: wait; opacity: .7; }
 .case-section h2 { font: clamp(24px, 3.5vw, 49px)/1.02 var(--display); letter-spacing: -.06em; }
 .case-section p { max-width: 57ch; font-size: clamp(17px, 1.7vw, 23px); line-height: 1.58; }
 .case-section img { margin-top: 22px; max-height: 650px; object-fit: contain; object-position: left; }
+.service-offer, .offer-reference { scroll-margin-block-start: 20px; }
+.offer-detail { display: grid; justify-items: start; gap: 14px; }
+.offer-detail .offer-example, .offer-reference p { font-size: clamp(16px, 1.35vw, 19px); line-height: 1.45; }
+.offer-example a { font-weight: 700; text-underline-offset: .2em; }
+.offer-reference { background: #e9e4d6; padding: clamp(12px, 2vw, 24px); }
+.offer-reference h3 { margin-bottom: 6px; }
 .next { border-top: 1px solid; padding-block: 24px 48px; }
 .next a { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 20px; text-decoration: none; }
 .next a:hover strong { text-decoration: underline; }
@@ -166,7 +186,7 @@ form .button:disabled { cursor: wait; opacity: .7; }
 @media (max-width: 640px) {
   .top { align-items: flex-start; flex-direction: column; gap: 0; padding-top: 17px; min-height: 90px; }
   nav { gap: 17px; font-size: 14px; flex-wrap: wrap; }
-  .hero, .about-inner, .contact-inner, .case-section, .services-inner, .offer-list { grid-template-columns: 1fr; }
+  .hero, .about-intro, .about-steps, .about-proof, .contact-inner, .case-section, .services-inner, .offer-list { grid-template-columns: 1fr; }
   .hero { padding-top: 38px; gap: 30px; }
   .hero h1 { font-size: clamp(33px, 8.65vw, 53px); }
   .hero h1 span { display: inline; }

@@ -15,15 +15,23 @@ const locales = {
     sent: 'Mensaje enviado. Gracias por escribirme.', error: 'No se pudo enviar el mensaje. Puedes volver a intentarlo o escribirme por LinkedIn.',
     privacy: 'Usaré tu correo y el mensaje para responder a tu consulta.',
     thinking: 'Hablemos.', linkedin: 'Escríbeme por LinkedIn', next: 'Siguiente proyecto',
-    aboutHead: 'Del problema a una herramienta útil.',
+    aboutHead: 'Cómo trabajo',
     availability: 'Trabajo con profesionales y negocios de La Línea de la Concepción y del resto del Campo de Gibraltar. También colaboro en remoto.',
     title: 'Mateo | Desarrollo web en La Línea y Palantir Foundry',
     description: 'José Antonio Mateo Lara. Desarrollo y mantenimiento web, software a medida y consultoría tecnológica en La Línea y el Campo de Gibraltar. Experiencia en Palantir Foundry.',
-    aboutCopy: 'En proyectos para Airbus he trabajado con equipos que necesitan saber qué suministros pueden cubrir, qué piezas quedan pendientes o qué entregables ponen en riesgo un hito. Mi trabajo consiste en entender esas decisiones, convertir las reglas del proceso en software y dar al equipo una forma clara de actuar. Aplico el mismo método a proyectos freelance y al desarrollo de HeavyDesk.',
+    steps: [
+      ['Entiendo el punto de partida', 'Reviso qué tienes y qué quieres que cambie.'],
+      ['Elegimos cómo resolverlo', 'Valoramos si conviene reparar, usar una herramienta existente o construir algo a medida.'],
+      ['Acordamos el siguiente paso', 'Definimos qué decisión te llevas de la consulta o qué podrás revisar en la primera entrega.'],
+    ],
+    businessExperience: 'Trabajo con negocios', businessLink: 'Odoo y mantenimiento web',
+    industrialExperience: 'Experiencia industrial', industrialLink: 'Ver casos en Palantir Foundry',
     role: 'Desarrollador full stack en ALTEN, en proyectos para Airbus desde octubre de 2022.',
     back: 'Todos los proyectos', lang: 'Ver en inglés', filterLabel: 'Filtrar proyectos',
     serviceLinks: 'Servicios',
+    exploreServices: 'Ver servicios',
     serviceArea: 'La Línea, Campo de Gibraltar y en remoto',
+    contactFor: 'Consulta sobre',
   },
   en: {
     work: 'Work', about: 'About', contact: 'Contact', skip: 'Skip to content',
@@ -35,15 +43,23 @@ const locales = {
     sent: 'Message sent. Thanks for getting in touch.', error: 'The message could not be sent. Please try again or contact me on LinkedIn.',
     privacy: 'I’ll use your email and message to reply to your enquiry.',
     thinking: 'Let’s talk.', linkedin: 'Message me on LinkedIn', next: 'Next project',
-    aboutHead: 'From a problem to a tool that helps.',
+    aboutHead: 'How I work',
     availability: 'I work with professionals and businesses in La Línea de la Concepción and across Campo de Gibraltar. I also work remotely.',
     title: 'Mateo | Web development in La Línea & Palantir Foundry',
     description: 'José Antonio Mateo Lara. Web development and maintenance, custom software and technology consulting in La Línea and Campo de Gibraltar. Palantir Foundry experience.',
-    aboutCopy: 'On Airbus projects I’ve worked with teams that need to know which orders they can cover, which parts are outstanding, and which deliverables could put a milestone at risk. My job is to understand those decisions, translate process rules into software and give the team a clear way to act. I take the same approach to freelance projects and to building HeavyDesk.',
+    steps: [
+      ['I understand where you’re starting', 'I look at what you have and what you’d like to change.'],
+      ['We choose an approach', 'We weigh up fixing what you have, using an existing tool or building something custom.'],
+      ['We agree on the next step', 'We decide what the consultation will help you choose or what you’ll review in the first delivery.'],
+    ],
+    businessExperience: 'Working with businesses', businessLink: 'Odoo and website maintenance',
+    industrialExperience: 'Industrial experience', industrialLink: 'View Palantir Foundry case studies',
     role: 'Full-stack developer at ALTEN, working on projects for Airbus since October 2022.',
     back: 'All projects', lang: 'View in Spanish', filterLabel: 'Filter projects',
     serviceLinks: 'Services',
+    exploreServices: 'View services',
     serviceArea: 'La Línea, Campo de Gibraltar and remote',
+    contactFor: 'Enquiry about',
   },
 };
 
@@ -107,6 +123,8 @@ export function render(template, route, base) {
   const local = (id) => `${base}${home[lang]}#${id}`;
   const pageUrl = code => origin + base + routePath(code, route);
   const data = service?.[lang] ?? project?.[lang] ?? t;
+  const localService = service === services.local;
+  const contactHref = localService ? base + data.path + '#contact' : '#contact';
   const title = project
     ? `${data.title} | ${project.category === 'palantir' ? 'Palantir Foundry' : data.label}`
     : data.title;
@@ -130,7 +148,7 @@ export function render(template, route, base) {
     <header class="shell top">
       <a href="${base + home[lang]}" class="signature">Mateo<span>.</span></a>
       <nav aria-label="${lang === 'es' ? 'Navegación principal' : 'Main navigation'}">
-        <a href="${local('work')}">${t.work}</a><a href="${local('about')}">${t.about}</a><a href="${project || service ? '#contact' : local('contact')}">${t.contact}</a>
+        <a href="${local('work')}">${t.work}</a><a href="${local('about')}">${t.about}</a><a href="${project || service ? contactHref : local('contact')}">${t.contact}</a>
         <a class="language" data-language href="${base + routePath(other, route)}" hreflang="${other}" lang="${other}" aria-label="${t.lang}" title="${t.lang}"><span aria-hidden="true">${lang === 'es' ? '<b>ES</b> / EN' : 'ES / <b>EN</b>'}</span></a>
       </nav>
     </header>`;
@@ -150,8 +168,8 @@ export function render(template, route, base) {
     ${['es', 'en'].map(code => `<link rel="alternate" hreflang="${code}" href="${pageUrl(code)}">`).join('')}
     <link rel="alternate" hreflang="x-default" href="${pageUrl('es')}">
     <link rel="canonical" href="${pageUrl(lang)}">`;
-  const form = contact(t, lang, project?.id ?? service?.es.path.slice(0, -1));
-  const body = service ? servicePage(service, lang, base, form)
+  const form = contact(t, lang, project?.id ?? service?.es.path.slice(0, -1), localService);
+  const body = service ? servicePage(service, lang, other, base, form, contactHref)
     : project ? casePage(project, lang, base, t, form)
       : landing(lang, base, t, form);
   return template
@@ -165,12 +183,16 @@ function landing(lang, base, t, form) {
   const data = featured[lang];
   const local = services.local[lang];
   const palantir = services.palantir[lang];
-  return `<main id="main">
+  const businessReference = local.offers.find(offer => offer.key === 'mantenimiento-web').reference;
+  return `<main id="main" tabindex="-1">
     <section class="shell hero">
       <div class="hero-copy">
         <h1>${t.headline.map(line => `<span>${line}</span>`).join(' ')}</h1>
         <p>${t.intro}</p>
-        <a class="button blue" href="#contact">${t.action} ${arrow}</a>
+        <div class="hero-actions">
+          <a class="button blue" href="#contact">${t.action} ${arrow}</a>
+          <a class="text-link" href="#services">${t.exploreServices} <span aria-hidden="true">↓</span></a>
+        </div>
       </div>
       <a class="hero-project" href="${base + projectPath(lang, featured)}">
         <div class="hero-shot">${picture(base, featured.image, data.alt, 'hero', true)}</div>
@@ -180,7 +202,7 @@ function landing(lang, base, t, form) {
     <section class="services" id="services" aria-labelledby="services-title">
       <div class="shell services-inner">
         <div>
-          <h2 id="services-title">${t.serviceLinks}</h2>
+          <h2 id="services-title" tabindex="-1" data-fragment-focus>${t.serviceLinks}</h2>
           <p>${t.serviceArea}</p>
           <a class="specialty-link" href="${base + palantir.path}">${palantir.nav} ${arrow}</a>
         </div>
@@ -193,7 +215,7 @@ function landing(lang, base, t, form) {
       </div>
     </section>
     <section class="shell work" id="work" aria-labelledby="work-title">
-      <div class="section-head"><h2 id="work-title">${t.selected}</h2>
+      <div class="section-head"><h2 id="work-title" tabindex="-1" data-fragment-focus>${t.selected}</h2>
       <div class="filter" role="group" aria-label="${t.filterLabel}" data-filters hidden>
       ${['all', 'business', 'palantir'].map((key, index) => `<button type="button" data-filter="${key}" aria-pressed="${index === 0}">${t.filters[index]}</button>`).join('')}
       </div></div>
@@ -206,42 +228,76 @@ function landing(lang, base, t, form) {
           </a></article>`;
       }).join('')}</div>
     </section>
-    <section class="about" id="about"><div class="shell about-inner">
-      <h2>${t.aboutHead}</h2><div><p>${t.availability}</p><p>${t.aboutCopy}</p><p><strong>${t.role}</strong></p></div>
+    <section class="about" id="about" aria-labelledby="about-title"><div class="shell about-inner">
+      <div class="about-intro">
+        <h2 id="about-title" tabindex="-1" data-fragment-focus>${t.aboutHead}</h2>
+        <p>${t.availability}</p>
+      </div>
+      <ol class="about-steps" role="list">
+        ${t.steps.map(([title, copy]) => `<li><h3>${title}</h3><p>${copy}</p></li>`).join('')}
+      </ol>
+      <div class="about-proof">
+        <div>
+          <h3>${t.businessExperience}</h3>
+          <a class="text-link" href="${base + local.path}#${businessReference.id}">${t.businessLink} ${arrow}</a>
+        </div>
+        <div>
+          <h3>${t.industrialExperience}</h3>
+          <p>${t.role}</p>
+          <a class="text-link" href="${base + palantir.path}">${t.industrialLink} ${arrow}</a>
+        </div>
+      </div>
     </div></section>
     ${form}
   </main>`;
 }
 
-function servicePage(service, lang, base, form) {
+function servicePage(service, lang, other, base, form, contactHref) {
   const data = service[lang];
   const examples = service.projects.map(id => projects.find(project => project.id === id));
-  const sections = [
-    ...(data.offers ?? []).map(({ id, title, copy }) => [title, copy, id]),
-    ...data.sections,
-  ];
-  return `<main id="main">
+  return `<main id="main" tabindex="-1">
     <section class="shell case-hero service-hero">
       <a class="back" href="${base + home[lang]}">← Portfolio</a>
       <h1>${data.heading}</h1>
       <p class="case-intro">${data.intro}</p>
-      <a class="button blue service-action" href="#contact">${data.action} ${arrow}</a>
+      <a class="button blue service-action" href="${contactHref}">${data.action} ${arrow}</a>
     </section>
     <section class="shell case-body">
-      ${sections.map(([title, copy, id]) => `<section class="case-section"${id ? ` id="${id}"` : ''}><h2>${title}</h2><p>${copy}</p></section>`).join('')}
+      ${(data.offers ?? []).map(offer => serviceOffer(offer, service[other].offers.find(item => item.key === offer.key), lang, base)).join('')}
+      ${data.sections.map(([title, copy]) => `<section class="case-section"><h2>${title}</h2><p>${copy}</p></section>`).join('')}
       <section class="case-section"><h2>${data.examples}</h2>
-        <ul class="related-links">${examples.map(project => `<li><a href="${base + projectPath(lang, project)}">${project[lang].title} ${arrow}</a><p>${project[lang].intro}</p></li>`).join('')}</ul>
+        <ul class="related-links">${examples.map(project => `<li><a href="${base + projectPath(lang, project)}">${project[lang].title} ${arrow}</a><p>${project[lang].contribution ?? project[lang].intro}</p></li>`).join('')}</ul>
       </section>
     </section>
     ${form}
   </main>`;
 }
 
+function serviceOffer(offer, alternate, lang, base) {
+  const { id, key, title, copy, action, guidance, example, reference } = offer;
+  const exampleUrl = example?.project
+    ? base + projectPath(lang, projects.find(project => project.id === example.project))
+    : base + home[lang];
+  const contactUrl = base + services.local[lang].path + '?servicio=' + key + '#contact';
+  return `<section class="case-section service-offer" id="${id}" data-alternate-fragment="${alternate.id}">
+    <h2 tabindex="-1" data-fragment-focus>${title}</h2>
+    <div class="offer-detail">
+      <p>${copy}</p>
+      ${example ? `<p class="offer-example"><a href="${exampleUrl}">${example.label} ${arrow}</a> ${example.copy}</p>` : ''}
+      ${reference ? `<div class="offer-reference" id="${reference.id}" data-alternate-fragment="${alternate.reference.id}">
+        <h3 tabindex="-1" data-fragment-focus>${reference.title}</h3>
+        <p>${reference.copy}</p>
+      </div>` : ''}
+      <a class="text-link" href="${contactUrl}" data-offer-key="${key}" data-offer-title="${safe(title)}" data-offer-guidance="${safe(guidance)}">${action} ${arrow}</a>
+    </div>
+  </section>`;
+}
+
 function casePage(project, lang, base, t, form) {
   const data = project[lang];
   const next = projects[(projects.indexOf(project) + 1) % projects.length];
   const service = services[project.category === 'palantir' ? 'palantir' : 'local'][lang];
-  return `<main id="main">
+  return `<main id="main" tabindex="-1">
     <section class="shell case-hero ${project.category}">
       <a class="back" href="${base + home[lang]}#work">← ${t.back}</a>
       <p class="label">${data.label}</p>
@@ -259,13 +315,16 @@ function casePage(project, lang, base, t, form) {
   </main>`;
 }
 
-function contact(t, lang, source) {
-  return `<section class="contact" id="contact"><div class="shell contact-inner">
-    <div><h2>${t.thinking}</h2><a href="${linkedin}">${t.linkedin} ${arrow}</a></div>
+function contact(t, lang, source, localService) {
+  return `<section class="contact" id="contact" aria-labelledby="contact-title"><div class="shell contact-inner">
+    <div><h2 id="contact-title" tabindex="-1" data-fragment-focus>${t.thinking}</h2><a href="${linkedin}">${t.linkedin} ${arrow}</a></div>
     <form method="post" data-contact data-lang="${lang}" data-project="${source ?? ''}" data-sending="${t.sending}" data-sent="${t.sent}" data-error="${t.error}" hidden>
+      ${localService ? `<p class="contact-context" data-contact-context hidden>${t.contactFor} <strong></strong></p>` : ''}
       <label for="visitor-email">${t.email}</label><input id="visitor-email" type="email" name="email" autocomplete="email" required maxlength="254">
       <label for="visitor-name">${t.name}</label><input id="visitor-name" name="name" autocomplete="name" maxlength="120">
-      <label for="visitor-message">${t.message}</label><textarea id="visitor-message" name="message" rows="4" maxlength="5000" required aria-describedby="privacy"></textarea>
+      <label for="visitor-message">${t.message}</label>
+      ${localService ? '<p class="contact-guidance" id="contact-guidance" hidden></p>' : ''}
+      <textarea id="visitor-message" name="message" rows="4" maxlength="5000" required aria-describedby="privacy"></textarea>
       <div hidden><label for="website">Website</label><input id="website" name="website" tabindex="-1" autocomplete="off"></div>
       <p class="privacy" id="privacy">${t.privacy}</p>
       <button class="button ink" type="submit">${t.send} ${arrow}</button>

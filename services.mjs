@@ -30,8 +30,8 @@ export const services = {
           guidance: 'Comparte la dirección de tu web, si la tienes a mano, y cuéntame qué falla o qué te gustaría cambiar.',
           reference: {
             id: 'experiencia-mantenimiento',
-            title: 'Comercio de uniformes',
-            copy: 'Puse en marcha Odoo para la operativa de una tienda de uniformes y colaboro con el mantenimiento de la web que ya tenían.',
+            title: 'Uniwork · Odoo y mantenimiento web',
+            copy: 'Puse en marcha Odoo para la operativa de su tienda de uniformes y colaboro con el mantenimiento de la web que ya tenían.',
           },
         },
         {
@@ -88,8 +88,8 @@ export const services = {
           guidance: 'Share your website address if you have it handy, and tell me what’s broken or what you’d like to change.',
           reference: {
             id: 'maintenance-experience',
-            title: 'Uniform retailer',
-            copy: 'I set up Odoo to run the shop’s operations and help maintain its existing website.',
+            title: 'Uniwork · Odoo and website maintenance',
+            copy: 'I set up Odoo for their uniform shop’s day-to-day operations and help maintain their existing website.',
           },
         },
         {

@@ -1,3 +1,35 @@
+@font-face {
+  font-family: "Archivo Black";
+  src: url("/fonts/archivo-black-latin-ext.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Archivo Black";
+  src: url("/fonts/archivo-black-latin.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "DM Sans";
+  src: url("/fonts/dm-sans-latin-ext.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "DM Sans";
+  src: url("/fonts/dm-sans-latin.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
 :root {
   color-scheme: light;
   --paper: #f7f3e8;
@@ -15,7 +47,7 @@
 body { margin: 0; }
 a { color: inherit; }
 button, input, textarea { font: inherit; }
-img { display: block; max-width: 100%; }
+img { display: block; max-width: 100%; height: auto; }
 h1, h2, h3, p { margin: 0; }
 ::selection { background: var(--acid); color: var(--ink); }
 :focus-visible { outline: 3px solid #a12168; outline-offset: 5px; }
@@ -47,6 +79,8 @@ nav a:hover, .footer a:hover { text-decoration: underline; text-underline-offset
 .hero-caption strong { font: clamp(22px, 2.65vw, 42px)/1 var(--display); letter-spacing: -.06em; display: block; }
 .hero-caption div span { font-weight: 600; display: block; margin-top: 5px; }
 .hero-caption > span, .case-arrow { font-size: 27px; line-height: 1; }
+.service-nav { flex-wrap: wrap; gap: 0 clamp(18px, 4vw, 55px); padding-bottom: 12px; }
+.service-nav a { min-height: 44px; padding-block: 11px; color: var(--blue); text-decoration: underline; text-underline-offset: .2em; }
 .work { padding-bottom: clamp(60px, 9vw, 136px); }
 .section-head { border-top: 1px solid; display: flex; justify-content: space-between; align-items: end; gap: 16px 25px; padding: 20px 0 25px; flex-wrap: wrap; }
 .section-head h2, .about h2, .contact h2 { font: clamp(33px, 5.1vw, 82px)/1.01 var(--display); letter-spacing: -.07em; }

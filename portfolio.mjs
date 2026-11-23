@@ -22,6 +22,7 @@ const locales = {
     aboutCopy: 'En proyectos para Airbus he trabajado con equipos que necesitan saber qué suministros pueden cubrir, qué piezas quedan pendientes o qué entregables ponen en riesgo un hito. Mi trabajo consiste en entender esas decisiones, convertir las reglas del proceso en software y dar al equipo una forma clara de actuar. Aplico el mismo método a proyectos freelance y al desarrollo de HeavyDesk.',
     role: 'Desarrollador full stack en ALTEN, en proyectos para Airbus desde octubre de 2022.',
     back: 'Todos los proyectos', lang: 'Ver en inglés', filterLabel: 'Filtrar proyectos',
+    serviceLinks: 'Servicios',
   },
   en: {
     work: 'Work', about: 'About', contact: 'Contact', skip: 'Skip to content',
@@ -40,6 +41,7 @@ const locales = {
     aboutCopy: 'On Airbus projects I’ve worked with teams that need to know which orders they can cover, which parts are outstanding, and which deliverables could put a milestone at risk. My job is to understand those decisions, translate process rules into software and give the team a clear way to act. I take the same approach to freelance projects and to building HeavyDesk.',
     role: 'Full-stack developer at ALTEN, working on projects for Airbus since October 2022.',
     back: 'All projects', lang: 'View in Spanish', filterLabel: 'Filter projects',
+    serviceLinks: 'Services',
   },
 };
 
@@ -61,9 +63,35 @@ const safe = (value) => value.replace(/[&<>"']/g, (char) => ({
 })[char]);
 
 const arrow = '<span aria-hidden="true">↗</span>';
-const picture = (base, source, alt, eager = false) => source
-  ? `<img src="${base}portfolio/${source}" alt="${safe(alt)}" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async">`
-  : '';
+const imageDimensions = {
+  'chat-pedido-confirmados.webp': [1210, 530],
+  'chat-pedido-revision.webp': [1210, 524],
+  'flexit-demo.jpg': [1420, 950],
+  'heavydesk-cuotas.webp': [3600, 3000],
+  'heavydesk-entreno.webp': [1236, 2517],
+  'heavydesk-recepcion.webp': [3600, 3000],
+  'heavydesk-resumen.webp': [3600, 3000],
+};
+const imageSizes = {
+  hero: '(max-width: 640px) calc(100vw - 45px), (max-width: 850px) 40vw, (max-width: 1592px) 35vw, 540px',
+  featured: '(max-width: 640px) calc(100vw - 32px), (max-width: 1592px) 61vw, 970px',
+  card: '(max-width: 640px) calc(100vw - 32px), (max-width: 850px) 45vw, (max-width: 1592px) 30vw, 480px',
+  case: '(max-width: 1592px) 92vw, 1460px',
+  detail: '(max-width: 640px) calc(100vw - 32px), (max-width: 1592px) 51vw, 820px',
+};
+
+function picture(base, source, alt, slot, eager = false) {
+  if (!source) return '';
+  const url = base + 'portfolio/' + source;
+  const loading = eager ? 'fetchpriority="high"' : 'loading="lazy"';
+  const dimensions = imageDimensions[source];
+  if (!dimensions) return `<img src="${url}" alt="${safe(alt)}" ${loading} decoding="async">`;
+  const [width, height] = dimensions;
+  const stem = url.slice(0, url.lastIndexOf('.'));
+  const candidates = [480, 768, 1200].filter(size => size < width).map(size => `${stem}-${size}.webp ${size}w`);
+  candidates.push(`${url} ${width}w`);
+  return `<img src="${url}" srcset="${candidates.join(', ')}" sizes="${imageSizes[slot]}" width="${width}" height="${height}" alt="${safe(alt)}" ${loading} decoding="async">`;
+}
 
 export function sitemap(base) {
   const urls = [...routes.keys()].map(path => `  <url><loc>${safe(origin + base + path)}</loc></url>`).join('\n');
@@ -115,6 +143,7 @@ export function render(template, route, base) {
     ${schema ? `<script type="application/ld+json">${JSON.stringify(schema).replace(/</g, '\\u003c')}</script>` : ''}
     <meta name="theme-color" content="#f7f3e8">
     <link rel="icon" href="${base}favicon.png" type="image/png" sizes="96x96">
+    <link rel="preload" as="font" href="${base}fonts/archivo-black-latin.woff2" type="font/woff2" crossorigin>
     ${['es', 'en'].map(code => `<link rel="alternate" hreflang="${code}" href="${pageUrl(code)}">`).join('')}
     <link rel="alternate" hreflang="x-default" href="${pageUrl('es')}">
     <link rel="canonical" href="${pageUrl(lang)}">`;
@@ -139,10 +168,13 @@ function landing(lang, base, t, form) {
         <a class="button blue" href="#contact">${t.action} ${arrow}</a>
       </div>
       <a class="hero-project" href="${base + projectPath(lang, featured)}">
-        <div class="hero-shot">${picture(base, featured.image, data.alt, true)}</div>
+        <div class="hero-shot">${picture(base, featured.image, data.alt, 'hero', true)}</div>
         <div class="hero-caption"><div><strong>HeavyDesk</strong><span>${data.label}</span></div>${arrow}</div>
       </a>
     </section>
+    <nav class="shell service-nav" aria-label="${t.serviceLinks}">
+      ${Object.values(services).map(service => `<a href="${base + service[lang].path}">${service[lang].nav} ${arrow}</a>`).join('')}
+    </nav>
     <section class="shell work" id="work" aria-labelledby="work-title">
       <div class="section-head"><h2 id="work-title">${t.selected}</h2>
       <div class="filter" role="group" aria-label="${t.filterLabel}" data-filters hidden>
@@ -152,14 +184,13 @@ function landing(lang, base, t, form) {
         const data = item[lang];
         return `<article class="project ${item.id}" data-category="${item.category}">
           <a href="${base + projectPath(lang, item)}">
-          ${picture(base, item.image, data.alt)}
+          ${picture(base, item.image, data.alt, item === featured ? 'featured' : 'card')}
           <div class="project-copy"><p class="label">${data.label}</p><h3>${data.title}</h3><p>${data.intro}</p><span class="case-arrow" aria-hidden="true">↗</span></div>
           </a></article>`;
       }).join('')}</div>
     </section>
     <section class="about" id="about"><div class="shell about-inner">
-      <h2>${t.aboutHead}</h2><div><p>${t.availability}</p><p>${t.aboutCopy}</p><p><strong>${t.role}</strong></p>
-      <ul class="related-links">${Object.values(services).map(service => `<li><a href="${base + service[lang].path}">${service[lang].nav} ${arrow}</a></li>`).join('')}</ul></div>
+      <h2>${t.aboutHead}</h2><div><p>${t.availability}</p><p>${t.aboutCopy}</p><p><strong>${t.role}</strong></p></div>
     </div></section>
     ${form}
   </main>`;
@@ -195,10 +226,10 @@ function casePage(project, lang, base, t, form) {
       <p class="label">${data.label}</p>
       <h1>${data.title}</h1>
       <p class="case-intro">${data.intro}</p>
-      ${picture(base, project.image, data.alt, true)}
+      ${picture(base, project.image, data.alt, 'case', true)}
     </section>
     <article class="shell case-body">
-      ${data.sections.map(([title, copy, image, alt]) => `<section class="case-section"><h2>${title}</h2><div><p>${copy}</p>${picture(base, image, alt)}</div></section>`).join('')}
+      ${data.sections.map(([title, copy, image, alt]) => `<section class="case-section"><h2>${title}</h2><div><p>${copy}</p>${picture(base, image, alt, 'detail')}</div></section>`).join('')}
       ${project.url ? `<a class="button blue" href="${project.url}">${data.link} ${arrow}</a>` : ''}
     </article>
     <div class="shell next"><a href="${base + projectPath(lang, next)}">${t.next} <strong>${next[lang].title}</strong> ${arrow}</a>

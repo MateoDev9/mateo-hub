@@ -3,7 +3,7 @@ export const services = {
     projects: ['heavydesk', 'flexit', 'del-chat-al-pedido'],
     es: {
       path: 'desarrollo-software-la-linea/',
-      nav: 'Software a medida en La Línea',
+      nav: 'Software y desarrollo web en La Línea',
       title: 'Software a medida en La Línea de la Concepción | Mateo',
       heading: 'Desarrollo de software a medida en La Línea',
       description: 'Desarrollo web y software a medida en La Línea de la Concepción y el Campo de Gibraltar. Webs profesionales, portales e integraciones para autónomos y pymes.',
@@ -21,7 +21,7 @@ export const services = {
     },
     en: {
       path: 'en/custom-software-la-linea/',
-      nav: 'Custom software in La Línea',
+      nav: 'Software and web development in La Línea',
       title: 'Custom software development in La Línea | Mateo',
       heading: 'Custom software development in La Línea',
       description: 'Web development and custom software in La Línea de la Concepción and Campo de Gibraltar. Business websites, customer portals and integrations.',

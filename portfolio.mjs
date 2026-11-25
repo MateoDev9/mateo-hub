@@ -1,7 +1,6 @@
 import { projects, linkedin } from './content.mjs';
 import { services } from './services.mjs';
 
-const origin = 'https://mateodev9.github.io';
 const person = 'José Antonio Mateo Lara';
 
 const locales = {
@@ -111,17 +110,18 @@ function picture(base, source, alt, slot, eager = false) {
   return `<img src="${url}" srcset="${candidates.join(', ')}" sizes="${imageSizes[slot]}" width="${width}" height="${height}" alt="${safe(alt)}" ${loading} decoding="async">`;
 }
 
-export function sitemap(base) {
-  const urls = [...routes.keys()].map(path => `  <url><loc>${safe(origin + base + path)}</loc></url>`).join('\n');
+export function sitemap(site) {
+  const urls = [...routes.keys()].map(path => `  <url><loc>${safe(new URL(path, site).href)}</loc></url>`).join('\n');
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;
 }
 
-export function render(template, route, base) {
+export function render(template, route, site) {
+  const { origin, pathname: base } = site;
   const { lang, project, service } = route;
   const t = locales[lang];
   const other = lang === 'es' ? 'en' : 'es';
   const local = (id) => `${base}${home[lang]}#${id}`;
-  const pageUrl = code => origin + base + routePath(code, route);
+  const pageUrl = code => new URL(routePath(code, route), site).href;
   const data = service?.[lang] ?? project?.[lang] ?? t;
   const localService = service === services.local;
   const contactHref = localService ? base + data.path + '#contact' : '#contact';
@@ -155,7 +155,7 @@ export function render(template, route, base) {
   const footer = `<footer class="shell footer"><a href="${origin}/">${person}</a><a href="${linkedin}">LinkedIn ${arrow}</a></footer>`;
   const head = `<title>${safe(title)}</title>
     <meta name="description" content="${safe(description)}">
-    ${lang === 'es' && !project && !service ? '<meta name="google-site-verification" content="-5q8QG7-0vFgUDLC2TU6EKFohXRDH50HHSsExHz3bIw">' : ''}
+    ${origin === 'https://mateodev9.github.io' && lang === 'es' && !project && !service ? '<meta name="google-site-verification" content="-5q8QG7-0vFgUDLC2TU6EKFohXRDH50HHSsExHz3bIw">' : ''}
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="${person}">
     <meta property="og:title" content="${safe(title)}">
